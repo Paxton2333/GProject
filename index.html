@@ -5,42 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
     <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #4a90e2, #145ba5);
+            color: #f4f4f4;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 30px;
         }
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
         }
         p {
-            text-align: center;
             font-size: 1.2em;
-            color: #666;
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #e0e0e0;
         }
+
+        /* Button Container */
         .button-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            max-width: 600px;
+            width: 100%;
         }
+        
+        /* Button Styles */
         .button-container a {
-            display: inline-block;
-            padding: 15px 25px;
-            background-color: #4CAF50;
+            display: block;
+            padding: 15px;
+            background: #3a7bd5;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
+            text-align: center;
             font-size: 1em;
-            transition: background-color 0.3s;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
         .button-container a:hover {
-            background-color: #45a049;
+            background: #215a8a;
+            transform: translateY(-3px);
+        }
+        .button-container a:active {
+            transform: translateY(1px);
         }
     </style>
 </head>
