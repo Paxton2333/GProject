@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symbiote Incident</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+        /* Header and Footer Bar */
+        .bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background: #222222;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .header {
+            top: 0;
+        }
+        .footer {
+            bottom: 0;
+        }
+        .hidden-header {
+            transform: translateY(-100%); /* Move up off screen for header */
+        }
+        .hidden-footer {
+            transform: translateY(100%); /* Move down off screen for footer */
+        }
+        /* Main Content */
+        .content {
+            padding: 60px 20px; /* Space for the fixed bars */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .log {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #d3d3d3;
+        }
+        /* Button */
+        .go-back {
+            background: #333333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .go-back:hover {
+            background: #444444;
+        }
+    </style>
+    <script>
+        let headerVisible = true;
+        let footerVisible = true;
+
+        window.onscroll = function() {
+            if (window.scrollY > 50) {
+                headerVisible = false;
+                footerVisible = false;
+            } else {
+                headerVisible = true;
+                footerVisible = true;
+            }
+            updateBars();
+        };
+
+        window.onclick = function() {
+            headerVisible = true;
+            footerVisible = true;
+            updateBars();
+        };
+
+        function updateBars() {
+            const header = document.getElementById('header');
+            const footer = document.getElementById('footer');
+
+            header.className = headerVisible ? 'bar header' : 'bar header hidden-header';
+            footer.className = footerVisible ? 'bar footer' : 'bar footer hidden-footer';
+        }
+    </script>
+</head>
+<body>
+    <div id="header" class="bar header">
+        <h2>Symbiote Invading</h2>
+    </div>
+
+    <div class="content">
+        <h1>Symbiote Incident Log</h1>
+
+        <div class="log">*This Log was written by: Subforce of A.T.F. (Allocation Task Force), codename Shrine*</div>
+        <div class="log">*Saeed, the Captain of Subforce, Shrine.*</div>
+        <div class="log">------</div>
+
+        <div class="log">This was written following an incident that happened a few weeks ago. We received a mission that a white goo-like symbiote had landed on a small-sized planet. We, Shrine, went to investigate, but all we found was the meteor, no white symbiote.</div>
+
+        <div class="log">We decided to search around the planet; given its small size, we assumed the search would be quick. We used our two spaceships to cover more ground. The only things we encountered were some trees, birds, animals resembling a mix of horses and cows, and some dog-like creatures, but still no sign of the white symbiote.</div>
+
+        <div class="log">After weeks of searching without results, we decided to call off the search. As a symbiote, it could have transferred to any living being. We needed to employ our Symbiote Detection System.</div>
+
+        <div class="log">Initially, I thought it would be easy. We used a machine designed to gather all living beings on the planet. However, when we activated the Detection System, it yielded no results. Frustrated, I prepared to contact G Foundation to request our retrieval.</div>
+
+        <div class="log">Just then, something unexpected happened... I took the Detector and waved it around. To my shock, the light illuminated one of my team members. Although it seemed ineffective, this time, something unimaginable occurred. That member began to scream as their bones and flesh melted, transforming into a white humanoid figure. THIS WAS THE SYMBIOTE WE HAD BEEN SEARCHING FOR, AND IT HAD ENTERED ONE OF MY MEMBER'S BODIES—IT HAD CONSUMED HIM!!!</div>
+
+        <div class="log">I activated the alarm, but the symbiote was too quick. It darted around our spaceship, mercilessly attacking my crew. In a desperate move, one of my team members managed to use a Symbiote Storer to contain it. While we succeeded in capturing it, we lost five members—now just piles of melted flesh and bones... God, why did I not notice this earlier...</div>
+
+        <div class="log">My Dear God, why did I not notice this member's strange feeling earlier...</div>
+    </div>
+
+    <div id="footer" class="bar footer">
+        <a href="page1.html" class="go-back">Go Back</a>
+    </div>
+</body>
+</html>
