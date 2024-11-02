@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>103.6 FM Anomaly Incident</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+        /* Header and Footer Bar */
+        .bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background: #222222;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .header {
+            top: 0;
+        }
+        .footer {
+            bottom: 0;
+        }
+        .hidden-header {
+            transform: translateY(-100%); /* Move up off screen for header */
+        }
+        .hidden-footer {
+            transform: translateY(100%); /* Move down off screen for footer */
+        }
+        /* Main Content */
+        .content {
+            padding: 60px 20px; /* Space for the fixed bars */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .log {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #d3d3d3;
+        }
+        /* Button */
+        .go-back {
+            background: #333333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .go-back:hover {
+            background: #444444;
+        }
+    </style>
+    <script>
+        let headerVisible = true;
+        let footerVisible = true;
+
+        window.onscroll = function() {
+            if (window.scrollY > 50) {
+                headerVisible = false;
+                footerVisible = false;
+            } else {
+                headerVisible = true;
+                footerVisible = true;
+            }
+            updateBars();
+        };
+
+        window.onclick = function() {
+            headerVisible = true;
+            footerVisible = true;
+            updateBars();
+        };
+
+        function updateBars() {
+            const header = document.getElementById('header');
+            const footer = document.getElementById('footer');
+
+            header.className = headerVisible ? 'bar header' : 'bar header hidden-header';
+            footer.className = footerVisible ? 'bar footer' : 'bar footer hidden-footer';
+        }
+    </script>
+</head>
+<body>
+    <div id="header" class="bar header">
+        <h2>103.6 FM Anomaly</h2>
+    </div>
+
+    <div class="content">
+        <h1>103.6 FM Anomaly Incident</h1>
+        
+        <div class="log">30XX/XX/XX</div>
+        
+        <div class="log">
+            It was a typical morning on Planet Casute, where both children and elders cherished listening to radio stations over television. However, this morning was different...
+        </div>
+        
+        <div class="log">
+            **06:00 AM, 103.6 FM**<br>
+            ---
+            <br>*103.6 FM plays*<br>
+            "Hello, ladies and gentlemen, good morning! This is 103.6 FM! We wish you a wonderful morning and a great day ahead!"<br>
+            "Today's FM schedule includes:<br>
+            06:30 - 07:00: Music Station Time<br>
+            07:00 - 08:00: Morning News<br>
+            08:00 - 10:00: Stories and Myths<br>
+            10:00 - 11:00: Food Mysteries<br>
+            11:00 - 13:00: Noon Time Stories<br>
+            13:00 - 15:00: Afternoon News<br>
+            15:00 - 17:00: Yay! Children’s Story and Fun Games!!!<br>
+            17:00 - 19:00: Dinner Diners<br>
+            19:00 - 24:00: Nighttime Music"<br>
+            "So, have a great day!!"
+        </div>
+        
+        <div class="log">
+            *At 6:30 AM, 103.6 FM begins playing music until 7:00 AM, when morning news is supposed to air. However, something strange occurs...*
+        </div>
+
+        <div class="log">
+            *The radio starts to glitch at 7:00 AM*<br>
+            "psssshh"<br>
+            "Morning News, today let’s look at-----"<br>
+            "pssss"<br>
+            "pssshhhhh"<br>
+            "..."<br>
+            "Quisquis hoc audit 103.6 FM, te sentire possum, scio ubi sis, nunc securus non es, celare non potes, scio ubi sis, scio ubi sis, scio ubi sis."<br>
+            "..."<br>
+            *Initially, people assumed it was a prank or a hijacking. The transmission returned to normal by 7:30 AM.*
+        </div>
+
+        <div class="log">
+            *However, something went wrong at 3:00 PM, during what was supposed to be the Children’s Story fun game time...*<br>
+            "Hello Children! It’s 3:00 PM!! Let’s do something fun together------"<br>
+            "psshhh"<br>
+            "pfsssss..."<br>
+            "..."<br>
+            "*glitching sound*"<br>
+            "..."<br>
+            "Filii, fac quod dico, exi a domo tua, exi domo tua procul, veni ad silvam, et absconde, et exspectans utere te ad pascendas silvas, exi exi exi exi exi ---- ----"<br>
+            "*Horror screams*"
+        </div>
+
+        <div class="log">
+            *In that moment, the people realized the truth—103.6 FM had malfunctioned, broadcasting something sinister. Many parents quickly turned off the radio and noticed their children behaving strangely, leading to panic and tears.*
+        </div>
+
+        <div class="log">
+            *This incident has since become a chilling myth. The G Foundation's A.T.F. dispatched another subforce, named Hydra, to investigate. They translated the ominous messages and found the following meanings:<br>
+            1. "Quisquis hoc audit 103.6 FM, te sentire possum, scio ubi sis, nunc securus non es, celare non potes, scio ubi sis, scio ubi sis, scio ubi sis" translates to: "Whoever is listening to this 103.6 FM, I can sense you, I know where you are, you are not safe now, you cannot hide, I know where you are, I know where you are, I know where you are."<br>
+            2. "Filii, fac quod dico, exi a domo tua, exi longe domum tuam, veni ad silvam, et absconde, et exspectans pascere silvas, exi exi exi exi exi" translates to: "Children, do what I say, go outside from your home, leave your home far away, come to the forest, and hide, and waiting to feed the woods, get out get out get out get out get..."* 
+        </div>
+
+        <div class="log">
+            *Despite extensive searches, no traces were found, and the incident remains an unsettling myth to this day.*
+        </div>
+    </div>
+
+    <div id="footer" class="bar footer">
+        <a href="page1.html" class="go-back">Go Back</a>
+    </div>
+</body>
+</html>
