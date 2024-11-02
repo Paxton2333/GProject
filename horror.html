@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horror Incident</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+        /* Header and Footer Bar */
+        .bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background: #222222;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .header {
+            top: 0;
+        }
+        .footer {
+            bottom: 0;
+        }
+        .hidden {
+            transform: translateY(-100%);
+        }
+        /* Main Content */
+        .content {
+            padding: 60px 20px; /* Space for the fixed bars */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .log {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #d3d3d3;
+        }
+        /* Button */
+        .go-back {
+            background: #333333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .go-back:hover {
+            background: #444444;
+        }
+    </style>
+    <script>
+        let headerVisible = true;
+        let footerVisible = true;
+        
+        window.onscroll = function() {
+            if (window.scrollY > 50) {
+                headerVisible = false;
+                footerVisible = false;
+            } else {
+                headerVisible = true;
+                footerVisible = true;
+            }
+            updateBars();
+        };
+
+        window.onclick = function() {
+            headerVisible = true;
+            footerVisible = true;
+            updateBars();
+        };
+
+        function updateBars() {
+            const header = document.getElementById('header');
+            const footer = document.getElementById('footer');
+
+            header.className = headerVisible ? 'bar header' : 'bar header hidden';
+            footer.className = footerVisible ? 'bar footer' : 'bar footer hidden';
+        }
+    </script>
+</head>
+<body>
+    <div id="header" class="bar header">
+        <h2>Horror Incident: Allocation Task Force Log</h2>
+    </div>
+
+    <div class="content">
+        <h1>Horror Incident</h1>
+        
+        <div class="log">
+            The incident took place on Planet Thonta, a sizable planet. The Allocation Task Force, known as Prima Pars, has deployed to investigate.
+        </div>
+        
+        <div class="log">
+            <strong>Signal:</strong> Strong
+        </div>
+
+        <div class="log">
+            <strong>Clen:</strong> *psss* This is Captain Clen, leader of the Prima Pars. We have successfully landed on Planet Thonta. To my left is an ancient forest, shrouded in mystery, and to my right, an expansive desert. I'm unsure how this planet operates, but for now, everything appears normal... at least for the moment. Over. *pshhh*
+        </div>
+        
+        <div class="log">
+            ---
+        </div>
+
+        <div class="log">
+            G Foundation calls back...
+        </div>
+
+        <div class="log">
+            *pshhhh*<br>
+            <strong>G Foundation:</strong> *pssshh* Hello? One, two, three—if you hear me, please respond.<br>
+            <strong>Clen:</strong> *pssshshh* Hello, I hear you.<br>
+            <strong>G Foundation:</strong> What’s your signal status?<br>
+            <strong>Clen:</strong> Signal is strong.<br>
+            <strong>G Foundation:</strong> Okay, we have some questions for you.<br>
+            <strong>Clen:</strong> Sure, go ahead.<br>
+            <strong>G Foundation:</strong> Did you observe any lifeforms upon landing with the Prima Pars subforce?<br>
+            <strong>Clen:</strong> No, nothing out of the ordinary. The only living beings I see are myself and my team members.<br>
+            <strong>G Foundation:</strong> That's odd. Our scans indicated that lifeforms are present on this planet.<br>
+            <strong>Clen:</strong> Perhaps they are hidden in that forest or the desert? I can’t say for sure.<br>
+            <strong>G Foundation:</strong> What’s your plan moving forward?<br>
+            <strong>Clen:</strong> My plan is to first explore the forest and then the desert.<br>
+            <strong>G Foundation:</strong> Alright then, good luck. Over. *psshhh*<br>
+            <strong>Clen:</strong> Over. *pshh*
+        </div>
+        
+        <div class="log">
+            The call ends, but a day later, Clen initiates contact again...
+        </div>
+        
+        <div class="log">
+            <strong>Clen:</strong> *pssshh* Hello, hello! One, two, three—if you hear me, please respond.<br>
+            <strong>G Foundation:</strong> *pssshh* Hello, we hear you.<br>
+            <strong>Clen:</strong> I think we’ve encountered something unusual... Prima Pars and I traversed the forest and found NO signs of life—no animals, no birds, not even insects...<br>
+            <strong>G Foundation:</strong> That’s quite strange. Continue your investigation. If you need anything, just reach out.<br>
+            <strong>Clen:</strong> Yes, I will. It’s just... I have a feeling something bad is about to happen.<br>
+            <strong>G Foundation:</strong> Don't dwell on those thoughts. If nothing occurs, we’ll sign off.<br>
+            <strong>Clen:</strong> Sure... Over. *pshh*<br>
+            <strong>G Foundation:</strong> Over. *pshh*
+        </div>
+
+        <div class="log">
+            Days turn into silence as 3, 4, 5 days pass without a word from Clen. Something feels wrong.
+        </div>
+
+        <div class="log">
+            <strong>G Foundation:</strong> *psshhh* Hello, hello! One, two, three—if you hear me, please respond.<br>
+            ...<br>
+            <strong>G Foundation:</strong> Hello? Is anyone there?<br>
+            ...<br>
+            <strong>G Foundation:</strong> Clen? Captain Clen? Are you there?<br>
+            ...
+        </div>
+
+        <div class="log">
+            <strong>???:</strong> *psshhh* You won’t see him again.<br>
+            <strong>G Foundation:</strong> Who are you?<br>
+            <strong>???:</strong> You won’t see him again.<br>
+            <strong>G Foundation:</strong> What do you mean? Where is Captain Clen and the Prima Pars subforce?<br>
+            <strong>???:</strong> You won’t see him again.<br>
+            <strong>G Foundation:</strong> WAIT WH----- *psshh*
+        </div>
+
+        <div class="log">
+            ---
+        </div>
+
+        <div class="log">
+            Signal was lost for eight months...
+        </div>
+
+        <div class="log">
+            In the aftermath, G Foundation has officially declared Clen and the Prima Pars subforce as missing, presumed dead.
+        </div>
+    </div>
+
+    <div id="footer" class="bar footer">
+        <a href="page1.html" class="go-back">Go Back</a>
+    </div>
+</body>
+</html>
