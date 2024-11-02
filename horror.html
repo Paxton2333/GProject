@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horror Incident</title>
-    <link rel="icon" href="gfoundationicon.png" type="image/png">
     <style>
         /* Global Styles */
         * {
@@ -38,8 +37,11 @@
         .footer {
             bottom: 0;
         }
-        .hidden {
-            transform: translateY(100%); /* Move down off screen */
+        .hidden-header {
+            transform: translateY(-100%); /* Move up off screen for header */
+        }
+        .hidden-footer {
+            transform: translateY(100%); /* Move down off screen for footer */
         }
         /* Main Content */
         .content {
@@ -95,8 +97,8 @@
             const header = document.getElementById('header');
             const footer = document.getElementById('footer');
 
-            header.className = headerVisible ? 'bar header' : 'bar header hidden';
-            footer.className = footerVisible ? 'bar footer' : 'bar footer hidden';
+            header.className = headerVisible ? 'bar header' : 'bar header hidden-header';
+            footer.className = footerVisible ? 'bar footer' : 'bar footer hidden-footer';
         }
     </script>
 </head>
