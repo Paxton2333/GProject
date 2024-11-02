@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Teleportation System</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+        /* Header and Footer Bar */
+        .bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background: #222222;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .header {
+            top: 0;
+        }
+        .footer {
+            bottom: 0;
+        }
+        .hidden {
+            transform: translateY(-100%);
+        }
+        /* Main Content */
+        .content {
+            padding: 60px 20px; /* Space for the fixed bars */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .log {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #d3d3d3;
+        }
+        /* Button */
+        .go-back {
+            background: #333333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .go-back:hover {
+            background: #444444;
+        }
+    </style>
+    <script>
+        let headerVisible = true;
+        let footerVisible = true;
+        
+        window.onscroll = function() {
+            if (window.scrollY > 50) {
+                headerVisible = false;
+                footerVisible = false;
+            } else {
+                headerVisible = true;
+                footerVisible = true;
+            }
+            updateBars();
+        };
+
+        window.onclick = function() {
+            headerVisible = true;
+            footerVisible = true;
+            updateBars();
+        };
+
+        function updateBars() {
+            const header = document.getElementById('header');
+            const footer = document.getElementById('footer');
+
+            header.className = headerVisible ? 'bar header' : 'bar header hidden';
+            footer.className = footerVisible ? 'bar footer' : 'bar footer hidden';
+        }
+    </script>
+</head>
+<body>
+    <div id="header" class="bar header">
+        <h2>Universal Teleportation System: Logs</h2>
+    </div>
+
+    <div class="content">
+        <h1>Universal Teleportation System</h1>
+        
+        <div class="log">
+            <strong>Log 1:</strong> The Universal Teleportation System project has commenced. If successful, it will elevate universal technology to unprecedented heights, positioning the G Foundation as the pioneer of a system capable of traversing any corner of the Universe, including parallel and alternate universes!
+        </div>
+        
+        <div class="log">
+            <strong>Log 2:</strong> Progress is on track! Despite some materials being challenging to procure, we at the G Foundation will not be deterred. We have successfully completed 40% of the System.
+        </div>
+        
+        <div class="log">
+            <strong>Log 3:</strong> Fantastic news! Four weeks in, we have reached 85% completion of the System. There's a palpable magnetic field of universal energy surrounding it, even at this stage.
+        </div>
+        
+        <div class="log">
+            <strong>Log 4:</strong> A month has passed, and today marks a significant milestone: the System is fully constructed. All that remains is to charge it, and we will initiate the first test.
+        </div>
+        
+        <div class="log">
+            <strong>Log 5:</strong> The Universal Teleportation System has been charging for three days. Now, it's time for the first test!
+        </div>
+        
+        <div class="log">
+            <strong>Log 6:</strong> Disaster strikes! The System has gone berserk! It activated spontaneously and is consuming everything like a black hole. Dr. G has already been pulled inside; I can't determine where he has been teleported to...
+        </div>
+        
+        <div class="log">
+            <strong>Log 7:</strong> Fortunately, the chaos didn't last long—the charging process completed, and the System has returned to a dormant state. The experience was utterly terrifying.
+        </div>
+        
+        <div class="log">
+            <strong>Log 8:</strong> The primary cause of the System's berserk behavior was the impurity in its fuel source. Now, with Dr. G missing, he may have been transported somewhere within the Universe or even to another realm... the uncertainty is unnerving.
+        </div>
+    </div>
+
+    <div id="footer" class="bar footer">
+        <a href="page1.html" class="go-back">Go Back</a>
+    </div>
+</body>
+</html>
