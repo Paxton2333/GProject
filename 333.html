@@ -5,58 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Portal</title>
     <style>
-        /* Basic styling */
-        body { font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; text-align: center; }
-        form { display: inline-block; margin-top: 50px; }
-        input[type="text"], input[type="password"] { padding: 8px; margin: 8px 0; width: 200px; }
-        button { padding: 10px 20px; background-color: #333; color: #fff; border: none; cursor: pointer; }
-        button:hover { background-color: #444; }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #333333;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            background-color: #444444;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <h1>Login Portal</h1>
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Username" required><br>
-        <input type="password" id="password" placeholder="Password" required><br>
-        <button type="submit">Login</button>
-        <p id="message" style="color: red;"></p>
-    </form>
+    <div class="login-container">
+        <h2>Login Portal</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="message" style="color: red; display: none;"></p>
+    </div>
 
     <script>
-        document.getElementById("loginForm").addEventListener("submit", async function(event) {
-            event.preventDefault();
-
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
+        async function login() {
+            const usernameInput = document.getElementById('username').value;
+            const passwordInput = document.getElementById('password').value;
+            const message = document.getElementById('message');
 
             try {
-                const response = await fetch("https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/users.txt");
-                const data = await response.text();
+                const response = await fetch('https://raw.githubusercontent.com/Paxton2333/GProject/refs/heads/main/users.txt');
+                const text = await response.text();
 
-                // Parse the users.txt data
-                const lines = data.split("\n");
-                let isAuthenticated = false;
+                // Parse each line and check if credentials match
+                const lines = text.split('\n');
+                let validLogin = false;
 
-                for (const line of lines) {
-                    const [fileUsername, filePassword] = line.split(":");
-                    if (fileUsername === username && filePassword.trim() === password) {
-                        isAuthenticated = true;
+                for (let line of lines) {
+                    const [username, password] = line.trim().split('|').map(item => item.trim());
+                    if (usernameInput === username && passwordInput === password) {
+                        validLogin = true;
                         break;
                     }
                 }
 
-                const message = document.getElementById("message");
-                if (isAuthenticated) {
-                    window.location.href = "main.html";  // Redirect to main.html on successful login
+                if (validLogin) {
+                    window.location.href = 'main.html';
                 } else {
                     message.textContent = "Invalid username or password.";
+                    message.style.display = "block";
                 }
-
             } catch (error) {
-                console.error("Error fetching users.txt:", error);
-                document.getElementById("message").textContent = "Error logging in. Please try again later.";
+                message.textContent = "Error fetching users file.";
+                message.style.display = "block";
             }
-        });
+        }
     </script>
 </body>
 </html>
