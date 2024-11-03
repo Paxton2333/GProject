@@ -20,6 +20,7 @@
             flex-direction: column;
             align-items: center;
             padding: 40px;
+            position: relative;
         }
 
         /* Title and Button Styles */
@@ -57,6 +58,58 @@
         .button-container a:active {
             transform: translateY(1px);
         }
+
+        /* Popup Styling */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #222222;
+            padding: 20px;
+            color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            text-align: center;
+            width: 300px;
+        }
+        .popup p {
+            margin-bottom: 20px;
+        }
+        .popup .popup-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+        .popup button {
+            padding: 10px 20px;
+            background: #333333;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .popup button:hover {
+            background: #444444;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+        }
+        .go-back {
+            background: #333333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .go-back:hover {
+            background: #444444;
+        }
     </style>
 </head>
 <body>
@@ -68,8 +121,60 @@
         <a href="symbiote.html">Symbiote Incident</a>
         <a href="mp.html">Mutation Planet</a>
     </div>
-    <div id="footer" class="bar footer">
+    <div id="footer" class="footer">
         <a href="index.html" class="go-back">Go Back</a>
     </div>
+
+    <!-- Popup Structure -->
+    <div id="popup" class="popup">
+        <p>Are you sure you want to go there?</p>
+        <div class="popup-buttons">
+            <button id="yesButton">Yes</button>
+            <button id="noButton">No</button>
+        </div>
+    </div>
+
+    <script>
+        let threePressCount = 0;
+        let lastPressTime = 0;
+
+        // Detect the '3' key being pressed three times
+        document.addEventListener('keydown', function(event) {
+            const currentTime = new Date().getTime();
+
+            if (event.key === '3') {
+                if (currentTime - lastPressTime < 500) { // Less than 500ms between presses
+                    threePressCount++;
+                } else {
+                    threePressCount = 1; // Reset if too much time has passed
+                }
+                lastPressTime = currentTime;
+
+                if (threePressCount === 3) {
+                    threePressCount = 0; // Reset the counter
+                    showPopup();
+                }
+            }
+        });
+
+        // Show the popup
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        // Hide the popup
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        // Button event listeners
+        document.getElementById('yesButton').addEventListener('click', function() {
+            window.location.href = '333.html';
+        });
+
+        document.getElementById('noButton').addEventListener('click', function() {
+            hidePopup();
+        });
+    </script>
 </body>
 </html>
