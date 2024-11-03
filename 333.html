@@ -50,35 +50,26 @@
     </div>
 
     <script>
-        async function login() {
+        function login() {
             const usernameInput = document.getElementById('username').value;
             const passwordInput = document.getElementById('password').value;
             const message = document.getElementById('message');
 
-            try {
-                const response = await fetch('https://raw.githubusercontent.com/Paxton2333/GProject/refs/heads/main/users.txt');
-                const text = await response.text();
+            // Hardcoded credentials
+            const validCredentials = [
+                { username: 'G_123', password: '01000111' },
+                { username: 'Princeton_FS', password: 'princeton' }
+            ];
 
-                // Parse each line and check if credentials match
-                const lines = text.split('\n');
-                let validLogin = false;
+            // Check if entered credentials match any of the valid ones
+            const isValidLogin = validCredentials.some(credentials =>
+                credentials.username === usernameInput && credentials.password === passwordInput
+            );
 
-                for (let line of lines) {
-                    const [username, password] = line.trim().split('|').map(item => item.trim());
-                    if (usernameInput === username && passwordInput === password) {
-                        validLogin = true;
-                        break;
-                    }
-                }
-
-                if (validLogin) {
-                    window.location.href = 'main.html';
-                } else {
-                    message.textContent = "Invalid username or password.";
-                    message.style.display = "block";
-                }
-            } catch (error) {
-                message.textContent = "Error fetching users file.";
+            if (isValidLogin) {
+                window.location.href = 'main.html';
+            } else {
+                message.textContent = "Invalid username or password.";
                 message.style.display = "block";
             }
         }
