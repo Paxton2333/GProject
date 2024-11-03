@@ -28,55 +28,11 @@
             background-size: cover;
             z-index: -1;
         }
-
-        /* Centered Text Style */
-        .content {
-            text-align: center;
-            color: white;
-            font-size: 2em;
-            z-index: 1;
-            user-select: none;
-            letter-spacing: 0.1em; /* Add space between letters */
-        }
-
-        /* Random Color Animation */
-        .glitch-text span {
-            display: inline-block;
-            transition: color 0.2s;
-            animation: colorChange 1s infinite alternate;
-        }
-
-        @keyframes colorChange {
-            0% { color: white; }
-            50% { color: black; }
-            100% { color: white; }
-        }
     </style>
-    <script>
-        // Function to apply random color effect to each letter
-        function applyGlitchEffect() {
-            const text = document.querySelector('.glitch-text');
-            const letters = text.textContent.split('');
-            text.innerHTML = ''; // Clear original text
-
-            letters.forEach(letter => {
-                const span = document.createElement('span');
-                span.textContent = letter;
-                text.appendChild(span);
-            });
-        }
-
-        // Apply effect on page load
-        window.onload = applyGlitchEffect;
-    </script>
 </head>
 <body>
 
     <div class="background"></div>
-
-    <div class="content">
-        <div class="glitch-text">you couldn't save it...</div>
-    </div>
 
 </body>
 </html>
