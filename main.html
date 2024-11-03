@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G Foundation Backend System Page</title>
+    <style>
+        /* Global Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d0e7ff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            width: 100%;
+            background-color: #002f6c;
+            color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 10px 0;
+            font-weight: bold;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        /* Content Section */
+        .content {
+            margin-top: 70px;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* Animation - Sci-Fi Code Bars */
+        .code-animation {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+            height: 150px;
+        }
+        .code-bar {
+            width: 20px;
+            background-color: #009688;
+            border-radius: 5px;
+            animation: bounce 1.5s infinite ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        /* Create animation for different bar heights */
+        .code-bar:nth-child(1) { animation-delay: 0.1s; }
+        .code-bar:nth-child(2) { animation-delay: 0.2s; }
+        .code-bar:nth-child(3) { animation-delay: 0.3s; }
+        .code-bar:nth-child(4) { animation-delay: 0.4s; }
+        .code-bar:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Keyframes for bar animation */
+        @keyframes bounce {
+            0%, 100% { height: 40px; }
+            50% { height: 120px; }
+        }
+
+        /* Text Below Animation */
+        .description {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #555555;
+            margin: 20px 0;
+        }
+
+        /* Button Styling */
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .button-container a {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #007acc;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .button-container a:hover {
+            background: #005a99;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <h1>Backend System Page</h1>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content">
+        <!-- Code Animation -->
+        <div class="code-animation">
+            <div class="code-bar"></div>
+            <div class="code-bar"></div>
+            <div class="code-bar"></div>
+            <div class="code-bar"></div>
+            <div class="code-bar"></div>
+        </div>
+
+        <!-- Text Description -->
+        <p class="description">Allocating the Universe's Anomaly is our Job...</p>
+
+        <!-- Button Links -->
+        <div class="button-container">
+            <a href="fp.html">Go to the File Page</a>
+            <a href="dp.html">Go to the Document Page</a>
+        </div>
+    </div>
+    
+</body>
+</html>
