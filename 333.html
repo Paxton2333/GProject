@@ -4,39 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Portal</title>
+    <link rel="icon" href="gfoundationicon.png" type="image/png">
     <style>
+        /* Global Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #121212;
+            background: linear-gradient(to right, #141e30, #243b55);
             color: #ffffff;
         }
+
+        /* Login Container */
         .login-container {
-            width: 300px;
-            padding: 20px;
-            background-color: #333333;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 320px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            backdrop-filter: blur(10px);
         }
+        .login-container h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #f8f9fa;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Input Fields */
         input[type="text"], input[type="password"] {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 12px;
+            margin: 12px 0;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s ease;
         }
+        input[type="text"]:focus, input[type="password"]:focus {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Button Styling */
         button {
             width: 100%;
-            padding: 10px;
-            margin-top: 10px;
+            padding: 12px;
+            margin-top: 15px;
             border: none;
-            background-color: #444444;
+            background-color: #ff416c;
             color: #ffffff;
             font-weight: bold;
+            font-size: 1em;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background-color: #ff4b2b;
+        }
+
+        /* Error Message */
+        #message {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #ff4b4b;
+            display: none;
         }
     </style>
 </head>
@@ -46,7 +91,7 @@
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button onclick="login()">Login</button>
-        <p id="message" style="color: red; display: none;"></p>
+        <p id="message">Invalid username or password.</p>
     </div>
 
     <script>
@@ -69,7 +114,6 @@
             if (isValidLogin) {
                 window.location.href = 'main.html';
             } else {
-                message.textContent = "Invalid username or password.";
                 message.style.display = "block";
             }
         }
