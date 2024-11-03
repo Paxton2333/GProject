@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutation Planet</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+        /* Header and Footer Bar */
+        .bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background: #222222;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .header {
+            top: 0;
+        }
+        .footer {
+            bottom: 0;
+        }
+        .hidden-header {
+            transform: translateY(-100%); /* Move up off screen for header */
+        }
+        .hidden-footer {
+            transform: translateY(100%); /* Move down off screen for footer */
+        }
+        /* Main Content */
+        .content {
+            padding: 60px 20px; /* Space for the fixed bars */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .log {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #d3d3d3;
+        }
+        /* Button */
+        .go-back {
+            background: #333333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .go-back:hover {
+            background: #444444;
+        }
+    </style>
+    <script>
+        let headerVisible = true;
+        let footerVisible = true;
+
+        window.onscroll = function() {
+            if (window.scrollY > 50) {
+                headerVisible = false;
+                footerVisible = false;
+            } else {
+                headerVisible = true;
+                footerVisible = true;
+            }
+            updateBars();
+        };
+
+        window.onclick = function() {
+            headerVisible = true;
+            footerVisible = true;
+            updateBars();
+        };
+
+        function updateBars() {
+            const header = document.getElementById('header');
+            const footer = document.getElementById('footer');
+
+            header.className = headerVisible ? 'bar header' : 'bar header hidden-header';
+            footer.className = footerVisible ? 'bar footer' : 'bar footer hidden-footer';
+        }
+    </script>
+</head>
+<body>
+    <div id="header" class="bar header">
+        <h2>The Mutation of a Planet</h2>
+    </div>
+
+    <div class="content">
+        <h1>Mutation Planet Incident Log</h1>
+
+        <div class="log">Date: 30XX/XX/XX</div>
+        <div class="log">*Log by: Subforce of A.T.F. (Allocation Task Force), codename Cascade*</div>
+        <div class="log">*Captain Calky, Subforce Cascade*</div>
+        <div class="log">------</div>
+
+        <div class="log">Cascade investigated a peculiar planet—remarkably, this planet itself appears to be alive, with the capacity to move autonomously and a conscious awareness. It has been observed consuming nearby meteors.</div>
+
+        <div class="log">We discovered that some meteors it hadn’t yet devoured were showing signs of assimilation, developing flesh-like tissue around them, likely from the planet itself. The planet’s surface is covered in a reddish fluid and dark, brownish-black tissue, which seems to function as its "muscle" or "flesh."</div>
+
+        <div class="log">Further investigation revealed that this planet wasn’t always like this. Previously, it was a typical, non-living planet with its own ecosystems and lifeforms. We hypothesize that it underwent a mutation or transformation, possibly after coming into contact with another sentient planet—or perhaps it was invaded by some kind of parasitic planetary organism.</div>
+
+        <div class="log">The exact cause remains unknown…</div>
+    </div>
+
+    <div id="footer" class="bar footer">
+        <a href="page1.html" class="go-back">Go Back</a>
+    </div>
+</body>
+</html>
