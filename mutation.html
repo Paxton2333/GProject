@@ -13,7 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: black;
+            background-color: black; /* Fallback color */
             font-family: Arial, sans-serif;
         }
 
@@ -27,7 +27,6 @@
             background: url('https://github.com/Paxton2333/GProject/blob/main/distortation.gif?raw=true') no-repeat center center fixed;
             background-size: cover;
             z-index: -1;
-            opacity: 0.5;
         }
 
         /* Centered Text Style */
@@ -37,6 +36,7 @@
             font-size: 2em;
             z-index: 1;
             user-select: none;
+            letter-spacing: 0.1em; /* Add space between letters */
         }
 
         /* Random Color Animation */
