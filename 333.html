@@ -5,176 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Portal</title>
     <style>
-        /* Basic styling for the form */
         body {
             font-family: Arial, sans-serif;
             background-color: #121212;
             color: #ffffff;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
         }
-
-        .container {
-            background-color: #1e1e1e;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        .login-container {
             width: 300px;
-            text-align: center;
+            padding: 20px;
+            background-color: #333333;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-
         h2 {
+            text-align: center;
             margin-bottom: 20px;
-            color: #ffffff;
         }
-
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .form-group label {
+        label, input {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            width: 100%;
+            margin-bottom: 10px;
         }
-
-        .form-group input {
+        input[type="text"], input[type="password"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            background-color: #444444;
+            color: #ffffff;
+        }
+        button {
             width: 100%;
             padding: 10px;
-            background: #333333;
+            background-color: #555555;
             color: #ffffff;
             border: none;
             border-radius: 5px;
-        }
-
-        .form-group button {
-            width: 100%;
-            padding: 10px;
-            background: #444444;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
         }
-
-        .form-group button:hover {
-            background: #555555;
+        button:hover {
+            background-color: #666666;
         }
-
-        .toggle-link {
-            margin-top: 15px;
-            color: #aaaaaa;
-            cursor: pointer;
-            display: inline-block;
-            text-decoration: underline;
-        }
-
-        .toggle-link:hover {
-            color: #ffffff;
-        }
-
-        .error-message {
-            color: #ff6666;
-            font-size: 0.9em;
-            margin-top: 10px;
-        }
-
-        .success-message {
-            color: #66ff66;
-            font-size: 0.9em;
+        .error {
+            color: #ff6b6b;
+            text-align: center;
             margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="auth-container">
-        <h2 id="form-title">Register</h2>
-        <div id="register-form">
-            <div class="form-group">
-                <label for="register-username">Username</label>
-                <input type="text" id="register-username" required>
-            </div>
-            <div class="form-group">
-                <label for="register-password">Password</label>
-                <input type="password" id="register-password" required>
-            </div>
-            <div class="form-group">
-                <button onclick="register()">Register</button>
-            </div>
-            <p class="toggle-link" onclick="showLogin()">Already have an account? Login</p>
-            <p id="register-message" class="error-message"></p>
-        </div>
-        
-        <div id="login-form" style="display: none;">
-            <div class="form-group">
-                <label for="login-username">Username</label>
-                <input type="text" id="login-username" required>
-            </div>
-            <div class="form-group">
-                <label for="login-password">Password</label>
-                <input type="password" id="login-password" required>
-            </div>
-            <div class="form-group">
-                <button onclick="login()">Login</button>
-            </div>
-            <p class="toggle-link" onclick="showRegister()">Don’t have an account? Register</p>
-            <p id="login-message" class="error-message"></p>
-        </div>
+    <div class="login-container">
+        <h2>Login Portal</h2>
+        <label for="username">Username</label>
+        <input type="text" id="username" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
+        <button onclick="login()">Login</button>
+        <div class="error" id="error-message"></div>
     </div>
 
     <script>
-        function showRegister() {
-            document.getElementById('register-form').style.display = 'block';
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('form-title').innerText = 'Register';
-            document.getElementById('register-message').innerText = '';
-            document.getElementById('login-message').innerText = '';
-        }
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('error-message');
 
-        function showLogin() {
-            document.getElementById('register-form').style.display = 'none';
-            document.getElementById('login-form').style.display = 'block';
-            document.getElementById('form-title').innerText = 'Login';
-            document.getElementById('register-message').innerText = '';
-            document.getElementById('login-message').innerText = '';
-        }
+            try {
+                const response = await fetch('users.txt');
+                const text = await response.text();
+                const users = text.split('\n').map(line => line.split(','));
 
-        function register() {
-            const username = document.getElementById('register-username').value;
-            const password = document.getElementById('register-password').value;
+                const userExists = users.some(user => 
+                    user[0] === username && user[1] === password.trim()
+                );
 
-            if (username && password) {
-                localStorage.setItem('username', username);
-                localStorage.setItem('password', password);
-                document.getElementById('register-message').innerText = 'Registration successful!';
-                document.getElementById('register-message').className = 'success-message';
-                showLogin();
-            } else {
-                document.getElementById('register-message').innerText = 'Please fill in all fields.';
-                document.getElementById('register-message').className = 'error-message';
-            }
-        }
-
-        function login() {
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-            const storedUsername = localStorage.getItem('username');
-            const storedPassword = localStorage.getItem('password');
-
-            if (username === storedUsername && password === storedPassword) {
-                document.getElementById('login-message').innerText = 'Login successful!';
-                document.getElementById('login-message').className = 'success-message';
-                // Redirect to a different page if needed
-                // window.location.href = 'welcome.html';
-            } else {
-                document.getElementById('login-message').innerText = 'Incorrect username or password.';
-                document.getElementById('login-message').className = 'error-message';
+                if (userExists) {
+                    window.location.href = 'main.html';
+                } else {
+                    errorMessage.textContent = 'Invalid username or password.';
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Error loading user data.';
             }
         }
     </script>
