@@ -5,34 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mutation</title>
     <style>
-        /* Background and Page Styles */
+        /* Resetting body and html styles */
         body, html {
             height: 100%;
             margin: 0;
-            overflow: hidden; /* Prevent scrolling */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: black; /* Fallback color */
+            overflow: auto; /* Allow scrolling */
             font-family: Arial, sans-serif;
+            background-color: black; /* Fallback color */
         }
 
         /* Background Image */
         .background {
-            position: absolute;
+            position: fixed; /* Fixed position */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: url('https://github.com/Paxton2333/GProject/blob/main/distortation.gif?raw=true') no-repeat center center fixed;
             background-size: cover;
-            z-index: -1;
+            z-index: -1; /* Place behind content */
+        }
+
+        /* Scrollable Content */
+        .content {
+            height: 200vh; /* Make the content height larger to allow scrolling */
+            display: flex;
+            flex-direction: column; /* Stack text vertically */
+            justify-content: flex-end; /* Align text to the bottom */
+            align-items: flex-end; /* Align text to the bottom */
+            padding: 20px; /* Add some padding */
+        }
+
+        /* Text Style */
+        .scroll-text {
+            color: white; /* Text color */
+            font-size: 0.8em; /* Small text size */
+            opacity: 0.8; /* Slight transparency */
+            margin-right: 10px; /* Margin from right */
+            margin-bottom: 5px; /* Margin from bottom */
+            max-width: 300px; /* Limit the width */
         }
     </style>
 </head>
 <body>
 
     <div class="background"></div>
+    <div class="content">
+        <div class="scroll-text">
+            He tried to save this planet, but nothing worked, he really tried, but what he got is the planet's assimilated, and himself got destroyed...
+        </div>
+        <div class="scroll-text">
+            They have left me at 24th, bastards...
+        </div>
+    </div>
 
 </body>
 </html>
