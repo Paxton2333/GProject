@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutation</title>
+    <style>
+        /* Background and Page Styles */
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden; /* Prevent scrolling */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Background Image */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('distortion.gif') no-repeat center center fixed;
+            background-size: cover;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* Centered Text Style */
+        .content {
+            text-align: center;
+            color: white;
+            font-size: 2em;
+            z-index: 1;
+            user-select: none;
+        }
+
+        /* Random Color Animation */
+        .glitch-text span {
+            display: inline-block;
+            transition: color 0.2s;
+            animation: colorChange 1s infinite alternate;
+        }
+
+        @keyframes colorChange {
+            0% { color: white; }
+            50% { color: black; }
+            100% { color: white; }
+        }
+
+        /* Planet Image */
+        .planet-image {
+            margin-top: 20px;
+            width: 200px; /* Adjust size as needed */
+            height: auto;
+        }
+    </style>
+    <script>
+        // Function to apply random color effect to each letter
+        function applyGlitchEffect() {
+            const text = document.querySelector('.glitch-text');
+            const letters = text.textContent.split('');
+            text.innerHTML = ''; // Clear original text
+
+            letters.forEach(letter => {
+                const span = document.createElement('span');
+                span.textContent = letter;
+                text.appendChild(span);
+            });
+        }
+
+        // Apply effect on page load
+        window.onload = applyGlitchEffect;
+    </script>
+</head>
+<body>
+
+    <div class="background"></div>
+
+    <div class="content">
+        <div class="glitch-text">you couldn't save it...</div>
+        <img src="planet.jpg" alt="Planet Image" class="planet-image">
+    </div>
+
+</body>
+</html>
