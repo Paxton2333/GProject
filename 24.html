@@ -52,9 +52,19 @@
     </div>
 
     <!-- Looping Background Audio -->
-    <audio autoplay loop>
+    <audio id="background-audio" loop>
         <source src="morse1.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+
+    <script>
+        // Play audio on page load
+        window.addEventListener("load", function() {
+            const audio = document.getElementById("background-audio");
+            audio.play().catch(error => {
+                console.log("Autoplay blocked. Audio will not start automatically.", error);
+            });
+        });
+    </script>
 </body>
 </html>
