@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Files</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+        /* Header and Footer Bar */
+        .bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background: #222222;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .header {
+            top: 0;
+        }
+        .footer {
+            bottom: 0;
+        }
+        .hidden-header {
+            transform: translateY(-100%); /* Move up off screen for header */
+        }
+        .hidden-footer {
+            transform: translateY(100%); /* Move down off screen for footer */
+        }
+        /* Main Content */
+        .content {
+            padding: 60px 20px; /* Space for the fixed bars */
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        /* Button Style */
+        .file-button {
+            background: #333333;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            display: inline-block;
+            margin: 10px;
+        }
+        .file-button:hover {
+            background: #444444;
+        }
+    </style>
+</head>
+<body>
+    <div id="header" class="bar header">
+        <h2>Files</h2>
+    </div>
+
+    <div class="content">
+        <h1>Files</h1>
+
+        <a href="f1.html" class="file-button">File 1</a>
+        <a href="f2.html" class="file-button">File 2</a>
+        <a href="f3.html" class="file-button">File 3</a>
+        <a href="f4.html" class="file-button">File 4</a>
+        <a href="f5.html" class="file-button">File 5</a>
+    </div>
+
+    <div id="footer" class="bar footer">
+        <a href="main.html" class="go-back">Go Back</a>
+    </div>
+</body>
+</html>
