@@ -69,6 +69,16 @@
             margin: 10px 0;
             text-align: center;
         }
+        /* Link Style for 'Secret' */
+        .secret-link {
+            color: #66ccff;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .secret-link:hover {
+            color: #99e6ff;
+        }
     </style>
     <script>
         function toggleContent(checkbox) {
@@ -87,7 +97,7 @@
 
         <label class="checkbox-label">
             <input type="checkbox" onclick="toggleContent(this)">
-            Click to Agree to the Terms of Secret
+            Click to Agree to the Terms of <a href="secret.html" class="secret-link">Secret</a>
         </label>
 
         <div id="hiddenContent" class="hidden-content">
