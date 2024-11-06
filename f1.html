@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subteam Crushen Record</title>
+    <style>
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+        /* Header and Footer Bar */
+        .bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            background: #222222;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header {
+            top: 0;
+        }
+        .footer {
+            bottom: 0;
+        }
+        /* Main Content */
+        .content {
+            padding: 60px 20px; /* Space for the fixed bars */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        /* Hidden Content Style */
+        .hidden-content {
+            display: none;
+            margin-top: 20px;
+            color: #d3d3d3;
+        }
+        /* Checkbox Label */
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        /* MP3 Placeholder */
+        .mp3-placeholder {
+            background: #333333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 10px 0;
+            text-align: center;
+        }
+    </style>
+    <script>
+        function toggleContent(checkbox) {
+            const content = document.getElementById('hiddenContent');
+            content.style.display = checkbox.checked ? 'block' : 'none';
+        }
+    </script>
+</head>
+<body>
+    <div id="header" class="bar header">
+        <h2>Subteam Crushen Emergency Log</h2>
+    </div>
+
+    <div class="content">
+        <h1>Subteam Crushen Report</h1>
+
+        <label class="checkbox-label">
+            <input type="checkbox" onclick="toggleContent(this)">
+            Click to Agree to the Terms of Secret
+        </label>
+
+        <div id="hiddenContent" class="hidden-content">
+            <p><strong>Emergency Record System: Subteam Crushen, Allocation Task Force</strong></p>
+            <p><strong>Captain:</strong> Captain Trensh, Leader of Subteam Crushen</p>
+            <hr>
+
+            <p><em>Recording initiated shortly before the demise of Subteam Crushen and Captain Trensh:</em></p>
+
+            <div class="mp3-placeholder">crushen.mp3 (placeholder for audio)</div>
+
+            <hr>
+
+            <p><em>Transcript of final recording:</em></p>
+            <p><em>[Static interference]</em></p>
+            <p><strong>Trensh:</strong> *shouting* It's... it's not going down!</p>
+            <p><em>[Gunfire from S12K shotgun]</em></p>
+            <p><em>[Unidentified sounds—possible organic tearing]</em></p>
+            <p><strong>Trensh:</strong> *panicked* WHY WON’T IT DIE?!</p>
+            <p><em>[More gunfire and screams]</em></p>
+            <p><em>[Final agonizing scream from Trensh]</em></p>
+
+            <p><em>Assessment:</em> Subteam Crushen is presumed lost after an encounter with unknown hostile entities. All members are believed to be deceased. Investigation into the nature of these attackers continues.</p>
+        </div>
+    </div>
+
+    <div id="footer" class="bar footer">
+        <a href="fp.html" class="go-back">Go Back</a>
+    </div>
+</body>
+</html>
