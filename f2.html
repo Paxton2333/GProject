@@ -13,195 +13,242 @@
         }
 
         body {
-            background-color: #000000; /* Full dark background */
-            color: white;
             font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             text-align: center;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        img {
+        #moon-img {
             width: 250px;
             height: 250px;
+            position: relative;
+        }
+
+        #math-section {
+            margin-top: 20px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #333;
+            color: white;
             cursor: pointer;
         }
 
-        .hidden {
+        button:hover {
+            background-color: #444;
+        }
+
+        #game-container {
             display: none;
+            background: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
-        #math-form {
-            margin-top: 20px;
-        }
-
-        #game-canvas {
-            display: none;
-            background-color: white;
-            border: 1px solid black;
-        }
-
-        .shake {
-            animation: shake 0.5s ease-in-out 4;
+        canvas {
+            background: #000;
+            display: block;
+            margin: auto;
         }
 
         @keyframes shake {
             0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(-10px, 0); }
-            50% { transform: translate(10px, 0); }
-            75% { transform: translate(-10px, 0); }
+            25% { transform: translate(5px, 5px); }
+            50% { transform: translate(-5px, -5px); }
+            75% { transform: translate(5px, -5px); }
+        }
+
+        .shake {
+            animation: shake 0.1s infinite;
         }
     </style>
 </head>
 <body>
-    <img src="moon.jpg" alt="Moon" id="moon-image">
-    <p class="caption">Moon</p>
+    <img src="moon.jpg" alt="Moon" id="moon-img">
+    <div id="math-section">
+        <p>Solve: <span id="math-question"></span></p>
+        <input type="text" id="math-answer" placeholder="Your Answer">
+        <button onclick="checkAnswer()">Submit</button>
+    </div>
+    <button id="hidden-button" onclick="showMathSection()" style="display:none;">Reveal Hidden</button>
 
-    <form id="math-form" class="hidden">
-        <label for="answer">Solve: <span id="math-question"></span></label><br>
-        <input type="text" id="answer">
-        <button type="submit">Submit</button>
-    </form>
-
-    <button id="play-button" class="hidden">Play</button>
-
-    <canvas id="game-canvas" width="500" height="500"></canvas>
+    <div id="game-container">
+        <canvas id="snake-game"></canvas>
+    </div>
 
     <script>
-        const moonImage = document.getElementById('moon-image');
-        const mathForm = document.getElementById('math-form');
-        const mathQuestion = document.getElementById('math-question');
-        const answerInput = document.getElementById('answer');
-        const playButton = document.getElementById('play-button');
-        const canvas = document.getElementById('game-canvas');
-        const ctx = canvas.getContext('2d');
+        // Image click math functionality
+        const moonImg = document.getElementById("moon-img");
+        const mathSection = document.getElementById("math-section");
+        const mathQuestion = document.getElementById("math-question");
+        const hiddenButton = document.getElementById("hidden-button");
+        let answer;
 
-        let randomMath = {
-            num1: Math.floor(Math.random() * 10) + 1,
-            num2: Math.floor(Math.random() * 10) + 1,
-        };
+        moonImg.addEventListener("click", () => hiddenButton.style.display = "block");
 
-        mathQuestion.textContent = `${randomMath.num1} + ${randomMath.num2}`;
+        function showMathSection() {
+            moonImg.style.display = "none";
+            mathSection.style.display = "flex";
 
-        moonImage.addEventListener('click', () => {
-            moonImage.classList.add('hidden');
-            mathForm.classList.remove('hidden');
-        });
+            // Generate easy math question
+            const num1 = Math.floor(Math.random() * 10 + 1);
+            const num2 = Math.floor(Math.random() * 10 + 1);
+            answer = num1 + num2;
+            mathQuestion.textContent = `${num1} + ${num2}`;
+        }
 
-        mathForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const answer = answerInput.value.trim();
-
-            if (answer === 'letmein') {
-                window.location.href = 'idontwanttosee.html';
-            } else if (parseInt(answer) === randomMath.num1 + randomMath.num2) {
-                mathForm.classList.add('hidden');
-                playButton.classList.remove('hidden');
+        function checkAnswer() {
+            const userAnswer = document.getElementById("math-answer").value.trim();
+            if (userAnswer === "letmein") {
+                window.location.href = "idontwanttosee.html";
+            } else if (parseInt(userAnswer) === answer) {
+                moonImg.style.display = "none";
+                mathSection.style.display = "none";
             } else {
-                moonImage.classList.remove('hidden');
-                mathForm.classList.add('hidden');
+                alert("Incorrect Answer!");
+                mathSection.style.display = "none";
+            }
+        }
+
+        // Snake Game
+        const gameContainer = document.getElementById("game-container");
+        const canvas = document.getElementById("snake-game");
+        const ctx = canvas.getContext("2d");
+
+        let gameOver = false;
+        let snake = [{ x: 50, y: 50 }];
+        let direction = { x: 10, y: 0 };
+        let food = { x: 100, y: 100 };
+        let score = 0;
+        let speed = 100;
+
+        canvas.width = 500;
+        canvas.height = 500;
+
+        function drawSnake() {
+            snake.forEach((segment) => {
+                ctx.fillStyle = "green";
+                ctx.fillRect(segment.x, segment.y, 10, 10);
+            });
+        }
+
+        function moveSnake() {
+            const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                generateFood();
+            } else {
+                snake.pop();
+            }
+        }
+
+        function generateFood() {
+            food = {
+                x: Math.floor(Math.random() * (canvas.width / 10)) * 10,
+                y: Math.floor(Math.random() * (canvas.height / 10)) * 10,
+            };
+        }
+
+        function drawFood() {
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, 10, 10);
+        }
+
+        function checkCollision() {
+            const head = snake[0];
+
+            // Check walls
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
+                return true;
+            }
+
+            // Check self collision
+            for (let i = 1; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function gameLoop() {
+            if (gameOver) return;
+
+            setTimeout(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawFood();
+                moveSnake();
+                drawSnake();
+
+                if (checkCollision()) {
+                    gameOver = true;
+                    setTimeout(() => (window.location.href = "moon.html"), 2000);
+                } else {
+                    gameLoop();
+                }
+            }, speed);
+        }
+
+        document.body.addEventListener("keydown", (e) => {
+            if (e.code === "Space") {
+                speed = 50;
             }
         });
 
-        // Snake Game Implementation
-        playButton.addEventListener('click', () => {
-            document.body.style.backgroundColor = 'white';
-            document.body.innerHTML = ''; // Clear all
-            canvas.style.display = 'block';
-            document.body.appendChild(canvas);
-
-            let snake = [{ x: 250, y: 250 }];
-            let direction = { x: 0, y: -10 };
-            let food = generateFood();
-            let score = 0;
-            let speed = 100;
-            let isGameOver = false;
-
-            function draw() {
-                if (isGameOver) return;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                // Draw snake
-                snake.forEach(segment => {
-                    ctx.fillStyle = 'green';
-                    ctx.fillRect(segment.x, segment.y, 10, 10);
-                });
-
-                // Draw food
-                ctx.fillStyle = food.color;
-                ctx.fillRect(food.x, food.y, 10, 10);
-
-                // Draw score
-                ctx.fillStyle = 'black';
-                ctx.font = '16px Arial';
-                ctx.fillText(`Score: ${score}`, 10, 20);
+        document.body.addEventListener("keyup", (e) => {
+            if (e.code === "Space") {
+                speed = 100;
             }
+        });
 
-            function update() {
-                if (isGameOver) return;
-
-                // Move snake
-                const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
-                snake.unshift(head);
-
-                // Check collision with food
-                if (head.x === food.x && head.y === food.y) {
-                    score += food.value;
-                    food = generateFood();
-                    if (food.color === 'black') {
-                        document.body.classList.add('shake');
-                        setTimeout(() => {
-                            window.location.href = 'moon.html';
-                        }, 2000);
-                    }
-                } else {
-                    snake.pop();
-                }
-
-                // Check collision with wall
-                if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
-                    isGameOver = true;
-                }
-
-                // Check collision with self
-                for (let i = 1; i < snake.length; i++) {
-                    if (head.x === snake[i].x && head.y === snake[i].y) {
-                        isGameOver = true;
-                    }
-                }
+        document.body.addEventListener("keydown", (e) => {
+            switch (e.code) {
+                case "ArrowUp":
+                    if (direction.y === 0) direction = { x: 0, y: -10 };
+                    break;
+                case "ArrowDown":
+                    if (direction.y === 0) direction = { x: 0, y: 10 };
+                    break;
+                case "ArrowLeft":
+                    if (direction.x === 0) direction = { x: -10, y: 0 };
+                    break;
+                case "ArrowRight":
+                    if (direction.x === 0) direction = { x: 10, y: 0 };
+                    break;
             }
+        });
 
-            function gameLoop() {
-                update();
-                draw();
-                if (!isGameOver) {
-                    setTimeout(gameLoop, speed);
-                }
-            }
-
-            function generateFood() {
-                const x = Math.floor(Math.random() * (canvas.width / 10)) * 10;
-                const y = Math.floor(Math.random() * (canvas.height / 10)) * 10;
-                const colors = ['red', 'blue', 'yellow', 'black'];
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                return { x, y, color, value: color === 'black' ? 0 : 10 };
-            }
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -10 };
-                if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: 10 };
-                if (e.key === 'ArrowLeft' && direction.x === 0) direction = { x: -10, y: 0 };
-                if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: 10, y: 0 };
-                if (e.key === ' ') speed = 50; // Speed up
-            });
-
-            document.addEventListener('keyup', (e) => {
-                if (e.key === ' ') speed = 100; // Reset speed
-            });
-
+        // Play button functionality
+        hiddenButton.addEventListener("click", () => {
+            gameContainer.style.display = "block";
+            document.body.style.background = "white";
             gameLoop();
         });
     </script>
