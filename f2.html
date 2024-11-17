@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color: #000000; /* Full dark background */
+            background-color: #000000;
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
@@ -22,6 +22,7 @@
             align-items: center;
             height: 100vh;
             text-align: center;
+            transition: background-color 1s;
         }
 
         img {
@@ -35,48 +36,51 @@
             font-size: 0.9em;
         }
 
-        /* Container for cubes */
-        .cube-container {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 50px;
-            width: 60%;
-        }
-
+        /* Styles for the cubes */
         .cube {
-            width: 100px;
-            height: 100px;
-            border-radius: 10px;
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            display: inline-block;
+            border: 2px solid #fff;
             cursor: pointer;
         }
 
-        .fixed-cube {
-            pointer-events: none; /* Prevent interaction with fixed cubes */
+        .blue {
+            background-color: blue;
         }
 
-        /* Dragging cubes */
-        .draggable {
-            cursor: move;
+        .green {
+            background-color: green;
         }
 
+        .red {
+            background-color: red;
+        }
+
+        .dragging {
+            opacity: 0.5;
+        }
+
+        /* Hide the cubes and the GO button initially */
         .hidden {
             display: none;
         }
 
-        /* GO button */
-        .go-button {
-            margin-top: 30px;
+        /* Position for the GO button */
+        #go-button {
+            margin-top: 20px;
             padding: 10px 20px;
-            background-color: #444444;
+            background-color: #333;
             color: white;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            display: none;
+            font-size: 1.2em;
+            transition: background-color 0.3s;
         }
 
-        .go-button:hover {
-            background-color: #555555;
+        #go-button:hover {
+            background-color: #444;
         }
     </style>
 </head>
@@ -84,89 +88,63 @@
     <img src="moon.jpg" alt="Moon" id="moonImage">
     <p class="caption">Moon</p>
 
-    <div class="cube-container hidden" id="cubesContainer">
-        <!-- Fixed color cubes (non-draggable) -->
-        <div class="cube fixed-cube" id="blueCube" style="background-color: blue;"></div>
-        <div class="cube fixed-cube" id="greenCube" style="background-color: green;"></div>
-        <div class="cube fixed-cube" id="redCube" style="background-color: red;"></div>
-
-        <!-- Draggable cubes -->
-        <div class="cube draggable" id="blueCubeDraggable" style="background-color: blue;" draggable="true"></div>
-        <div class="cube draggable" id="greenCubeDraggable" style="background-color: green;" draggable="true"></div>
-        <div class="cube draggable" id="redCubeDraggable" style="background-color: red;" draggable="true"></div>
+    <!-- 6 cubes: 3 fixed and 3 draggable -->
+    <div id="cubeContainer" class="hidden">
+        <div class="cube blue" id="blue1"></div>
+        <div class="cube green" id="green1"></div>
+        <div class="cube red" id="red1"></div>
+        <div class="cube blue" id="blue2" draggable="true"></div>
+        <div class="cube green" id="green2" draggable="true"></div>
+        <div class="cube red" id="red2" draggable="true"></div>
     </div>
 
-    <button class="go-button" id="goButton" onclick="location.href='moon.html'">GO</button>
+    <button id="go-button" class="hidden" onclick="window.location.href='moon.html'">GO</button>
 
     <script>
-        const moonImage = document.getElementById("moonImage");
-        const cubesContainer = document.getElementById("cubesContainer");
-        const goButton = document.getElementById("goButton");
+        // Elements
+        const moonImage = document.getElementById('moonImage');
+        const cubeContainer = document.getElementById('cubeContainer');
+        const goButton = document.getElementById('go-button');
+        const cubes = document.querySelectorAll('.cube');
 
-        const blueCubeDraggable = document.getElementById("blueCubeDraggable");
-        const greenCubeDraggable = document.getElementById("greenCubeDraggable");
-        const redCubeDraggable = document.getElementById("redCubeDraggable");
+        // Initially hide the cubes and the GO button
+        let matchedCount = 0;
 
-        const blueCube = document.getElementById("blueCube");
-        const greenCube = document.getElementById("greenCube");
-        const redCube = document.getElementById("redCube");
+        // Handle image click to reveal cubes and change background
+        moonImage.addEventListener('click', () => {
+            moonImage.style.display = 'none';
+            document.body.style.backgroundColor = 'white';
+            cubeContainer.classList.remove('hidden');
+        });
 
-        let isBluePlaced = false;
-        let isGreenPlaced = false;
-        let isRedPlaced = false;
+        // Handle dragging the cubes
+        cubes.forEach(cube => {
+            cube.addEventListener('dragstart', (event) => {
+                event.target.classList.add('dragging');
+            });
 
-        // Handle moon image click to start the puzzle
-        moonImage.onclick = function() {
-            document.body.style.backgroundColor = "#ffffff"; // Change background to white
-            cubesContainer.classList.remove("hidden"); // Show cubes
-        };
+            cube.addEventListener('dragend', (event) => {
+                event.target.classList.remove('dragging');
+            });
 
-        // Drag start event
-        blueCubeDraggable.ondragstart = (event) => event.dataTransfer.setData("text", "blue");
-        greenCubeDraggable.ondragstart = (event) => event.dataTransfer.setData("text", "green");
-        redCubeDraggable.ondragstart = (event) => event.dataTransfer.setData("text", "red");
+            cube.addEventListener('dragover', (event) => {
+                event.preventDefault();
+            });
 
-        // Drag over event (to allow dropping)
-        function allowDrop(event) {
-            event.preventDefault();
-        }
-
-        // Drop event (place the dragged cube)
-        blueCube.ondrop = (event) => drop(event, "blue");
-        greenCube.ondrop = (event) => drop(event, "green");
-        redCube.ondrop = (event) => drop(event, "red");
-
-        blueCube.ondragover = allowDrop;
-        greenCube.ondragover = allowDrop;
-        redCube.ondragover = allowDrop;
-
-        // Handle the cube placement logic
-        function drop(event, color) {
-            event.preventDefault();
-            const draggedColor = event.dataTransfer.getData("text");
-
-            if (color === draggedColor) {
-                if (color === "blue") {
-                    isBluePlaced = true;
-                    blueCubeDraggable.style.pointerEvents = "none"; // Disable dragging once placed
+            cube.addEventListener('drop', (event) => {
+                const draggedCube = document.querySelector('.dragging');
+                if (event.target.classList.contains(draggedCube.classList[1])) {
+                    event.target.appendChild(draggedCube);
+                    matchedCount++;
+                    checkMatching();
                 }
-                if (color === "green") {
-                    isGreenPlaced = true;
-                    greenCubeDraggable.style.pointerEvents = "none";
-                }
-                if (color === "red") {
-                    isRedPlaced = true;
-                    redCubeDraggable.style.pointerEvents = "none";
-                }
+            });
+        });
 
-                checkIfAllPlaced();
-            }
-        }
-
-        // Check if all cubes are placed
-        function checkIfAllPlaced() {
-            if (isBluePlaced && isGreenPlaced && isRedPlaced) {
-                goButton.style.display = "block"; // Show the GO button
+        // Check if all cubes are matched
+        function checkMatching() {
+            if (matchedCount === 3) {
+                goButton.classList.remove('hidden');
             }
         }
     </script>
