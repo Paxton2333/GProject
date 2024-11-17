@@ -24,19 +24,189 @@
             text-align: center;
         }
 
-        img {
+        #moon-image {
             width: 250px;
             height: 250px;
+            cursor: pointer;
         }
 
         .caption {
             margin-top: 10px;
             font-size: 0.9em;
         }
+
+        .hidden {
+            display: none;
+        }
+
+        #math-question {
+            margin-top: 20px;
+        }
+
+        #snake-container {
+            display: none;
+            position: relative;
+            width: 400px;
+            height: 400px;
+            border: 1px solid white;
+            background-color: black;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
     </style>
 </head>
 <body>
-    <img src="moon.jpg" alt="Moon">
-    <p class="caption">Moon</p>
+    <div id="content">
+        <img id="moon-image" src="moon.jpg" alt="Moon">
+        <p class="caption">Moon</p>
+        <div id="math-question" class="hidden">
+            <p>Solve: <span id="question"></span></p>
+            <input type="text" id="answer" placeholder="Your Answer">
+            <button onclick="checkAnswer()">Submit</button>
+        </div>
+        <button id="play-button" class="hidden" onclick="startGame()">Play</button>
+    </div>
+
+    <div id="snake-container">
+        <canvas id="snake-game" width="400" height="400"></canvas>
+    </div>
+
+    <script>
+        const moonImage = document.getElementById('moon-image');
+        const mathQuestion = document.getElementById('math-question');
+        const playButton = document.getElementById('play-button');
+        const content = document.getElementById('content');
+        const snakeContainer = document.getElementById('snake-container');
+        const canvas = document.getElementById('snake-game');
+        const ctx = canvas.getContext('2d');
+
+        // Snake game variables
+        let snake = [{ x: 200, y: 200 }];
+        let direction = 'RIGHT';
+        let dots = [];
+        let gameInterval;
+
+        // Generate math question
+        let num1, num2;
+        function generateQuestion() {
+            num1 = Math.floor(Math.random() * 10) + 1;
+            num2 = Math.floor(Math.random() * 10) + 1;
+            document.getElementById('question').textContent = `${num1} + ${num2}`;
+        }
+
+        function checkAnswer() {
+            const answer = parseInt(document.getElementById('answer').value);
+            if (answer === num1 + num2) {
+                moonImage.classList.add('hidden');
+                mathQuestion.classList.add('hidden');
+                playButton.classList.remove('hidden');
+            } else {
+                moonImage.classList.add('hidden');
+                mathQuestion.classList.add('hidden');
+            }
+        }
+
+        // Initialize Snake Game
+        function startGame() {
+            content.classList.add('hidden');
+            snakeContainer.style.display = 'block';
+            spawnDot('red');
+            spawnDot('blue');
+            spawnDot('white');
+            gameInterval = setInterval(updateGame, 100);
+            window.addEventListener('keydown', changeDirection);
+        }
+
+        function spawnDot(color) {
+            const dot = {
+                x: Math.floor(Math.random() * 20) * 20,
+                y: Math.floor(Math.random() * 20) * 20,
+                color: color
+            };
+            if (color === 'black') {
+                if (Math.random() < 0.05) {
+                    dots.push(dot);
+                }
+            } else {
+                dots.push(dot);
+            }
+        }
+
+        function updateGame() {
+            // Update snake position
+            const head = { ...snake[0] };
+            if (direction === 'UP') head.y -= 20;
+            if (direction === 'DOWN') head.y += 20;
+            if (direction === 'LEFT') head.x -= 20;
+            if (direction === 'RIGHT') head.x += 20;
+
+            // Check for collisions
+            if (head.x < 0 || head.y < 0 || head.x >= 400 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
+                clearInterval(gameInterval);
+                alert('Game Over!');
+                location.reload();
+                return;
+            }
+
+            // Check for dot collision
+            dots = dots.filter(dot => {
+                if (dot.x === head.x && dot.y === head.y) {
+                    if (dot.color === 'black') {
+                        window.location.href = 'moon.html';
+                    }
+                    return false; // Dot eaten
+                }
+                return true; // Dot still in game
+            });
+
+            // Move snake
+            snake.unshift(head);
+            while (snake.length > 5) snake.pop();
+
+            // Redraw game
+            drawGame();
+        }
+
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw snake
+            ctx.fillStyle = 'green';
+            snake.forEach(segment => {
+                ctx.fillRect(segment.x, segment.y, 20, 20);
+            });
+
+            // Draw dots
+            dots.forEach(dot => {
+                ctx.fillStyle = dot.color;
+                ctx.fillRect(dot.x, dot.y, 20, 20);
+            });
+
+            // Spawn new dots
+            if (dots.length < 3) {
+                const colors = ['red', 'blue', 'white'];
+                spawnDot(colors[Math.floor(Math.random() * colors.length)]);
+                spawnDot('black'); // Occasionally spawn black dot
+            }
+        }
+
+        function changeDirection(event) {
+            const key = event.key;
+            if (key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
+            if (key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
+            if (key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
+            if (key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+        }
+
+        moonImage.addEventListener('click', () => {
+            moonImage.classList.add('hidden');
+            mathQuestion.classList.remove('hidden');
+            generateQuestion();
+        });
+    </script>
 </body>
 </html>
