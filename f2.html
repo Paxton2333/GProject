@@ -13,7 +13,7 @@
         }
 
         body {
-            background-color: #000000; /* Full dark background */
+            background-color: #000000;
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
@@ -22,9 +22,10 @@
             align-items: center;
             height: 100vh;
             text-align: center;
+            overflow: hidden;
         }
 
-        #moon-image {
+        img {
             width: 250px;
             height: 250px;
             cursor: pointer;
@@ -35,178 +36,174 @@
             font-size: 0.9em;
         }
 
-        .hidden {
+        .math-box {
             display: none;
-        }
-
-        #math-question {
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
         }
 
-        #snake-container {
+        .math-box input {
+            margin: 10px 0;
+            padding: 5px;
+        }
+
+        .game-canvas {
             display: none;
-            position: relative;
-            width: 400px;
-            height: 400px;
-            border: 1px solid white;
-            background-color: black;
         }
 
         canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
+            background-color: #ffffff;
+            display: block;
+            border: 1px solid #000000;
         }
     </style>
 </head>
 <body>
-    <div id="content">
-        <img id="moon-image" src="moon.jpg" alt="Moon">
-        <p class="caption">Moon</p>
-        <div id="math-question" class="hidden">
-            <p>Solve: <span id="question"></span></p>
-            <input type="text" id="answer" placeholder="Your Answer">
-            <button onclick="checkAnswer()">Submit</button>
-        </div>
-        <button id="play-button" class="hidden" onclick="startGame()">Play</button>
+    <img src="moon.jpg" alt="Moon" id="moon-image">
+    <p class="caption">Moon</p>
+
+    <!-- Math Question -->
+    <div class="math-box" id="math-box">
+        <p id="math-question"></p>
+        <input type="text" id="math-answer" placeholder="Answer here">
+        <button id="submit-answer">Submit</button>
     </div>
 
-    <div id="snake-container">
-        <canvas id="snake-game" width="400" height="400"></canvas>
+    <!-- Play Button -->
+    <button id="play-button">Play</button>
+
+    <!-- Snake Game -->
+    <div class="game-canvas">
+        <canvas id="snake-game" width="800" height="600"></canvas>
     </div>
 
     <script>
-        const moonImage = document.getElementById('moon-image');
+        // References
+        const image = document.getElementById('moon-image');
+        const mathBox = document.getElementById('math-box');
         const mathQuestion = document.getElementById('math-question');
+        const mathAnswer = document.getElementById('math-answer');
+        const submitAnswer = document.getElementById('submit-answer');
         const playButton = document.getElementById('play-button');
-        const content = document.getElementById('content');
-        const snakeContainer = document.getElementById('snake-container');
+        const gameCanvas = document.querySelector('.game-canvas');
         const canvas = document.getElementById('snake-game');
         const ctx = canvas.getContext('2d');
 
-        // Snake game variables
-        let snake = [{ x: 200, y: 200 }];
-        let direction = 'RIGHT';
-        let dots = [];
-        let gameInterval;
+        let questionAnswer = null;
 
-        // Generate math question
-        let num1, num2;
-        function generateQuestion() {
-            num1 = Math.floor(Math.random() * 10) + 1;
-            num2 = Math.floor(Math.random() * 10) + 1;
-            document.getElementById('question').textContent = `${num1} + ${num2}`;
+        // Random Math Question
+        function generateMathQuestion() {
+            const num1 = Math.floor(Math.random() * 10 + 1);
+            const num2 = Math.floor(Math.random() * 10 + 1);
+            questionAnswer = num1 + num2;
+            mathQuestion.textContent = `What is ${num1} + ${num2}?`;
         }
 
-        function checkAnswer() {
-            const answer = parseInt(document.getElementById('answer').value);
-            if (answer === num1 + num2) {
-                moonImage.classList.add('hidden');
-                mathQuestion.classList.add('hidden');
-                playButton.classList.remove('hidden');
+        // Hide Image
+        image.onclick = () => {
+            mathBox.style.display = 'flex';
+            generateMathQuestion();
+        };
+
+        // Submit Math Answer
+        submitAnswer.onclick = () => {
+            const userAnswer = mathAnswer.value.trim();
+            if (userAnswer.toLowerCase() === 'letmein') {
+                window.location.href = 'idontwanttosee.html';
+            } else if (parseInt(userAnswer) === questionAnswer) {
+                image.style.display = 'none';
+                mathBox.style.display = 'none';
             } else {
-                moonImage.classList.add('hidden');
-                mathQuestion.classList.add('hidden');
+                image.style.display = 'none';
+                mathBox.style.display = 'none';
             }
-        }
+        };
 
-        // Initialize Snake Game
-        function startGame() {
-            content.classList.add('hidden');
-            snakeContainer.style.display = 'block';
-            spawnDot('red');
-            spawnDot('blue');
-            spawnDot('white');
-            gameInterval = setInterval(updateGame, 100);
-            window.addEventListener('keydown', changeDirection);
-        }
+        // Snake Game Logic
+        playButton.onclick = () => {
+            document.body.style.backgroundColor = 'white';
+            document.body.innerHTML = ''; // Clear the page
+            gameCanvas.style.display = 'block';
+            document.body.appendChild(gameCanvas);
 
-        function spawnDot(color) {
-            const dot = {
-                x: Math.floor(Math.random() * 20) * 20,
-                y: Math.floor(Math.random() * 20) * 20,
-                color: color
-            };
-            if (color === 'black') {
-                if (Math.random() < 0.05) {
-                    dots.push(dot);
-                }
-            } else {
-                dots.push(dot);
-            }
-        }
+            let snake = [{ x: 100, y: 100 }];
+            let direction = { x: 10, y: 0 };
+            let food = { x: getRandomPosition(canvas.width), y: getRandomPosition(canvas.height), color: getFoodColor() };
+            let score = 0;
 
-        function updateGame() {
-            // Update snake position
-            const head = { ...snake[0] };
-            if (direction === 'UP') head.y -= 20;
-            if (direction === 'DOWN') head.y += 20;
-            if (direction === 'LEFT') head.x -= 20;
-            if (direction === 'RIGHT') head.x += 20;
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Check for collisions
-            if (head.x < 0 || head.y < 0 || head.x >= 400 || head.y >= 400 || snake.some(s => s.x === head.x && s.y === head.y)) {
-                clearInterval(gameInterval);
-                alert('Game Over!');
-                location.reload();
-                return;
+                // Draw snake
+                ctx.fillStyle = 'green';
+                snake.forEach(segment => ctx.fillRect(segment.x, segment.y, 10, 10));
+
+                // Draw food
+                ctx.fillStyle = food.color;
+                ctx.fillRect(food.x, food.y, 10, 10);
+
+                // Draw score
+                ctx.fillStyle = 'black';
+                ctx.font = '20px Arial';
+                ctx.fillText(`Score: ${score}`, 10, 20);
             }
 
-            // Check for dot collision
-            dots = dots.filter(dot => {
-                if (dot.x === head.x && dot.y === head.y) {
-                    if (dot.color === 'black') {
+            function moveSnake() {
+                const head = { x: snake[0].x + direction.x, y: snake[0].y + direction.y };
+                snake.unshift(head);
+
+                // Check if the snake eats the food
+                if (head.x === food.x && head.y === food.y) {
+                    if (food.color === 'black') {
                         window.location.href = 'moon.html';
                     }
-                    return false; // Dot eaten
+                    score += 10;
+                    food = { x: getRandomPosition(canvas.width), y: getRandomPosition(canvas.height), color: getFoodColor() };
+                } else {
+                    snake.pop();
                 }
-                return true; // Dot still in game
-            });
-
-            // Move snake
-            snake.unshift(head);
-            while (snake.length > 5) snake.pop();
-
-            // Redraw game
-            drawGame();
-        }
-
-        function drawGame() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw snake
-            ctx.fillStyle = 'green';
-            snake.forEach(segment => {
-                ctx.fillRect(segment.x, segment.y, 20, 20);
-            });
-
-            // Draw dots
-            dots.forEach(dot => {
-                ctx.fillStyle = dot.color;
-                ctx.fillRect(dot.x, dot.y, 20, 20);
-            });
-
-            // Spawn new dots
-            if (dots.length < 3) {
-                const colors = ['red', 'blue', 'white'];
-                spawnDot(colors[Math.floor(Math.random() * colors.length)]);
-                spawnDot('black'); // Occasionally spawn black dot
             }
-        }
 
-        function changeDirection(event) {
-            const key = event.key;
-            if (key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
-            if (key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
-            if (key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
-            if (key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
-        }
+            function checkCollision() {
+                const head = snake[0];
+                const hitWall = head.x < 0 || head.y < 0 || head.x >= canvas.width || head.y >= canvas.height;
+                const hitSelf = snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y);
+                return hitWall || hitSelf;
+            }
 
-        moonImage.addEventListener('click', () => {
-            moonImage.classList.add('hidden');
-            mathQuestion.classList.remove('hidden');
-            generateQuestion();
-        });
+            function getRandomPosition(limit) {
+                return Math.floor(Math.random() * (limit / 10)) * 10;
+            }
+
+            function getFoodColor() {
+                const chance = Math.random();
+                if (chance < 0.05) return 'black'; // Black dot (5% chance)
+                if (chance < 0.45) return 'red'; // Red dot (40% chance)
+                if (chance < 0.75) return 'blue'; // Blue dot (30% chance)
+                return 'yellow'; // Yellow dot (25% chance)
+            }
+
+            function gameLoop() {
+                if (checkCollision()) {
+                    alert('Game Over! Your score: ' + score);
+                    window.location.reload();
+                } else {
+                    moveSnake();
+                    draw();
+                }
+            }
+
+            // Keyboard Controls
+            window.addEventListener('keydown', e => {
+                if (e.key === 'ArrowUp' && direction.y === 0) direction = { x: 0, y: -10 };
+                if (e.key === 'ArrowDown' && direction.y === 0) direction = { x: 0, y: 10 };
+                if (e.key === 'ArrowLeft' && direction.x === 0) direction = { x: -10, y: 0 };
+                if (e.key === 'ArrowRight' && direction.x === 0) direction = { x: 10, y: 0 };
+            });
+
+            setInterval(gameLoop, 100);
+        };
     </script>
 </body>
 </html>
