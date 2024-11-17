@@ -13,22 +13,21 @@
         }
 
         body {
-            background-color: #000000; /* Full dark background */
+            background-color: #000000;
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             text-align: center;
+            flex-direction: column;
         }
 
         img {
             width: 250px;
             height: 250px;
-            position: absolute;
-            z-index: 1;
+            cursor: pointer;
         }
 
         .caption {
@@ -36,236 +35,189 @@
             font-size: 0.9em;
         }
 
-        .hidden-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            z-index: 2; /* Button will be on top of the image */
-        }
-
-        #question-section {
-            display: none;
-            z-index: 3;
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-        }
-
         .question {
-            margin-bottom: 10px;
-        }
-
-        input {
-            margin-top: 10px;
-            padding: 10px;
-        }
-
-        #play-btn {
+            display: none;
             margin-top: 20px;
-            background-color: #333;
-            color: white;
+            font-size: 1.2em;
+        }
+
+        .play-btn {
+            margin-top: 30px;
             padding: 10px 20px;
-            border-radius: 5px;
+            background-color: #444444;
+            border: none;
+            color: white;
+            font-size: 1.2em;
             cursor: pointer;
         }
 
-        .hidden {
+        .play-btn:hover {
+            background-color: #666666;
+        }
+
+        /* Snake Game */
+        #gameArea {
             display: none;
+            position: relative;
+            width: 90vw;
+            height: 80vh;
+            background-color: #fafafa;
+            border: 2px solid #000;
         }
 
-        /* Snake Game styles */
-        #gameCanvas {
-            display: none;
-            margin-top: 20px;
-            background-color: white;
-            border: 2px solid #333;
+        .snake, .dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
         }
 
-        .shake {
-            animation: shake 0.5s infinite;
-        }
-
-        @keyframes shake {
-            0% { transform: translate(0); }
-            25% { transform: translate(-10px, 0); }
-            50% { transform: translate(10px, 0); }
-            75% { transform: translate(-10px, 0); }
-            100% { transform: translate(10px, 0); }
-        }
+        .red-dot { background-color: red; }
+        .blue-dot { background-color: blue; }
+        .yellow-dot { background-color: yellow; }
+        .black-dot { background-color: black; }
     </style>
 </head>
 <body>
+    <img id="moonImage" src="moon.jpg" alt="Moon" onclick="showMathQuestion()">
+    <p class="caption">Moon</p>
 
-    <img src="moon.jpg" alt="Moon" id="moonImage">
-    <button class="hidden-button" onclick="showQuestion()"></button>
-
-    <div id="question-section">
-        <p class="question">What is 5 + 3?</p>
-        <input type="text" id="answer">
+    <div id="question" class="question">
+        <p>Solve the math: <span id="mathQuestion"></span></p>
+        <input type="number" id="answer">
         <button onclick="checkAnswer()">Submit</button>
     </div>
 
-    <button id="play-btn" class="hidden" onclick="startGame()">Play</button>
-    <canvas id="gameCanvas" width="500" height="500"></canvas>
+    <button id="playBtn" class="play-btn" onclick="startSnakeGame()">Play</button>
+
+    <div id="gameArea"></div>
 
     <script>
-        let image = document.getElementById('moonImage');
-        let playButton = document.getElementById('play-btn');
-        let gameCanvas = document.getElementById('gameCanvas');
-        let ctx = gameCanvas.getContext('2d');
-        let questionSection = document.getElementById('question-section');
-        let answerInput = document.getElementById('answer');
-        let isGameRunning = false;
-        let score = 0;
-        let snake = [{x: 10, y: 10}];
-        let direction = 'RIGHT';
-        let food = [];
-        let gameInterval;
+        let isMathAnswered = false;
+        let correctAnswer = 0;
 
-        function showQuestion() {
-            image.style.display = 'none';
-            questionSection.style.display = 'block';
+        // Math question generator
+        function generateMathQuestion() {
+            const num1 = Math.floor(Math.random() * 10);
+            const num2 = Math.floor(Math.random() * 10);
+            correctAnswer = num1 + num2;
+            return `${num1} + ${num2}`;
+        }
+
+        function showMathQuestion() {
+            const mathQuestion = generateMathQuestion();
+            document.getElementById('mathQuestion').innerText = mathQuestion;
+            document.getElementById('question').style.display = 'block';
         }
 
         function checkAnswer() {
-            let answer = answerInput.value.trim();
-            if (answer === '8') {
-                // Correct answer
-                questionSection.style.display = 'none';
-                playButton.style.display = 'inline-block';
-            } else if (answer === 'letmein') {
-                window.location.href = "idontwanttosee.html";
+            const userAnswer = parseInt(document.getElementById('answer').value);
+            if (userAnswer === correctAnswer) {
+                document.getElementById('moonImage').style.display = 'none';
+                document.getElementById('question').style.display = 'none';
+                isMathAnswered = true;
             } else {
-                // Wrong answer
-                questionSection.style.display = 'none';
+                alert("Incorrect answer. Try again!");
+                document.getElementById('answer').value = '';
             }
         }
 
-        function startGame() {
-            document.body.style.backgroundColor = 'white';
-            playButton.style.display = 'none';
-            gameCanvas.style.display = 'block';
-            isGameRunning = true;
-            score = 0;
-            snake = [{x: 10, y: 10}];
-            direction = 'RIGHT';
-            spawnFood();
-            gameInterval = setInterval(gameLoop, 100);
-        }
-
-        function gameLoop() {
-            if (!isGameRunning) return;
-
-            moveSnake();
-            if (checkCollision()) {
-                endGame();
+        // Snake Game Logic
+        function startSnakeGame() {
+            if (!isMathAnswered) {
+                alert("Please solve the math question first!");
                 return;
             }
 
-            if (eatFood()) {
-                score += 10;
-                spawnFood();
+            document.body.style.backgroundColor = '#fafafa'; // White background
+            document.getElementById('gameArea').style.display = 'block';
+
+            const gameArea = document.getElementById('gameArea');
+            const snake = [{ x: 10, y: 10 }];
+            let direction = 'right';
+            let score = 0;
+            let gameInterval;
+            let dotInterval;
+            let blackDotInterval;
+
+            function drawSnake() {
+                gameArea.innerHTML = '';
+                snake.forEach(segment => {
+                    const snakeSegment = document.createElement('div');
+                    snakeSegment.classList.add('snake');
+                    snakeSegment.style.left = `${segment.x * 10}px`;
+                    snakeSegment.style.top = `${segment.y * 10}px`;
+                    gameArea.appendChild(snakeSegment);
+                });
             }
 
-            renderGame();
-        }
+            function generateDot() {
+                const colors = ['red-dot', 'blue-dot', 'yellow-dot', 'black-dot'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const dot = document.createElement('div');
+                dot.classList.add('dot', color);
+                dot.style.left = `${Math.floor(Math.random() * 90)}%`;
+                dot.style.top = `${Math.floor(Math.random() * 80)}%`;
+                gameArea.appendChild(dot);
 
-        function moveSnake() {
-            let head = { ...snake[0] };
-
-            if (direction === 'RIGHT') head.x++;
-            if (direction === 'LEFT') head.x--;
-            if (direction === 'UP') head.y--;
-            if (direction === 'DOWN') head.y++;
-
-            snake.unshift(head);
-            snake.pop();
-        }
-
-        function checkCollision() {
-            // Check wall collision (wrap around the border)
-            let head = snake[0];
-            if (head.x >= gameCanvas.width) head.x = 0;
-            if (head.x < 0) head.x = gameCanvas.width - 1;
-            if (head.y >= gameCanvas.height) head.y = 0;
-            if (head.y < 0) head.y = gameCanvas.height - 1;
-
-            // Check if snake collides with itself
-            for (let i = 1; i < snake.length; i++) {
-                if (snake[i].x === head.x && snake[i].y === head.y) {
-                    return true;
+                if (color === 'black-dot') {
+                    dot.onclick = () => {
+                        shakePage();
+                        setTimeout(() => {
+                            window.location.href = 'moon.html';
+                        }, 2000);
+                    };
+                } else {
+                    dot.onclick = () => {
+                        score += 10;
+                        gameArea.removeChild(dot);
+                    };
                 }
             }
-            return false;
-        }
 
-        function eatFood() {
-            let head = snake[0];
-            if (head.x === food.x && head.y === food.y) {
-                snake.push({}); // Grow the snake
-                return true;
-            }
-            return false;
-        }
+            function moveSnake() {
+                let head = { ...snake[0] };
 
-        function spawnFood() {
-            food = {
-                x: Math.floor(Math.random() * gameCanvas.width / 10) * 10,
-                y: Math.floor(Math.random() * gameCanvas.height / 10) * 10,
-            };
+                switch (direction) {
+                    case 'up':
+                        head.y -= 1;
+                        break;
+                    case 'down':
+                        head.y += 1;
+                        break;
+                    case 'left':
+                        head.x -= 1;
+                        break;
+                    case 'right':
+                        head.x += 1;
+                        break;
+                }
 
-            // Random chance for black dot
-            let randomChance = Math.random();
-            if (randomChance < 0.05) {
-                food.color = 'black';
-            } else {
-                food.color = ['red', 'blue', 'yellow'][Math.floor(Math.random() * 3)];
-            }
-        }
-
-        function renderGame() {
-            ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-            // Draw snake
-            for (let i = 0; i < snake.length; i++) {
-                ctx.fillStyle = 'green';
-                ctx.fillRect(snake[i].x, snake[i].y, 10, 10);
+                snake.unshift(head);
+                snake.pop();
+                drawSnake();
             }
 
-            // Draw food
-            ctx.fillStyle = food.color;
-            ctx.fillRect(food.x, food.y, 10, 10);
-
-            // Display score
-            ctx.fillStyle = 'black';
-            ctx.font = '20px Arial';
-            ctx.fillText("Score: " + score, 10, 20);
-        }
-
-        function endGame() {
-            clearInterval(gameInterval);
-            gameCanvas.style.display = 'none';
-            alert('Game Over');
-            window.location.href = 'moon.html';
-        }
-
-        // Snake controls
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
-            if (e.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
-            if (e.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
-            if (e.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
-            if (e.key === ' ' && isGameRunning) {
-                clearInterval(gameInterval);
-                gameInterval = setInterval(gameLoop, 50);
+            function shakePage() {
+                document.body.style.animation = 'shake 0.5s 5';
+                gameArea.style.animation = 'shake 0.5s 5';
+                score = Math.floor(Math.random() * (333 - 3 + 1)) + 3;
             }
-        });
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowUp' && direction !== 'down') direction = 'up';
+                if (e.key === 'ArrowDown' && direction !== 'up') direction = 'down';
+                if (e.key === 'ArrowLeft' && direction !== 'right') direction = 'left';
+                if (e.key === 'ArrowRight' && direction !== 'left') direction = 'right';
+                if (e.key === ' ' && gameInterval) {
+                    clearInterval(gameInterval);
+                    gameInterval = setInterval(moveSnake, 50);
+                }
+            });
+
+            gameInterval = setInterval(moveSnake, 200);
+            dotInterval = setInterval(generateDot, 2000);
+            blackDotInterval = setInterval(generateDot, 10000);
+        }
     </script>
 </body>
 </html>
