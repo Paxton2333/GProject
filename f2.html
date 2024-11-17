@@ -35,218 +35,139 @@
             font-size: 0.9em;
         }
 
-        .question {
-            display: none;
-            font-size: 1.2em;
-            margin-top: 10px;
+        /* Container for cubes */
+        .cube-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+            width: 60%;
         }
 
-        .button {
-            margin-top: 20px;
+        .cube {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .fixed-cube {
+            pointer-events: none; /* Prevent interaction with fixed cubes */
+        }
+
+        /* Dragging cubes */
+        .draggable {
+            cursor: move;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* GO button */
+        .go-button {
+            margin-top: 30px;
             padding: 10px 20px;
-            font-size: 1em;
-            background-color: #444;
+            background-color: #444444;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-        }
-
-        .button:hover {
-            background-color: #666;
-        }
-
-        /* Game Area */
-        .game {
-            width: 500px;
-            height: 500px;
-            background-color: #000;
-            border: 2px solid white;
-            position: relative;
             display: none;
         }
 
-        .snake {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: green;
-        }
-
-        .dot {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .red {
-            background-color: red;
-        }
-
-        .blue {
-            background-color: blue;
-        }
-
-        .yellow {
-            background-color: yellow;
-        }
-
-        .black {
-            background-color: black;
-        }
-
-        .shake {
-            animation: shake 0.5s ease-in-out infinite;
-        }
-
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-10px); }
-            100% { transform: translateX(0); }
+        .go-button:hover {
+            background-color: #555555;
         }
     </style>
 </head>
 <body>
-    <img id="moonImage" src="moon.jpg" alt="Moon">
+    <img src="moon.jpg" alt="Moon" id="moonImage">
     <p class="caption">Moon</p>
-    
-    <div id="mathQuestion" class="question">
-        <span id="questionText"></span><br>
-        <input type="number" id="answer" placeholder="Your answer">
-        <button onclick="checkAnswer()" class="button">Submit Answer</button>
+
+    <div class="cube-container hidden" id="cubesContainer">
+        <!-- Fixed color cubes (non-draggable) -->
+        <div class="cube fixed-cube" id="blueCube" style="background-color: blue;"></div>
+        <div class="cube fixed-cube" id="greenCube" style="background-color: green;"></div>
+        <div class="cube fixed-cube" id="redCube" style="background-color: red;"></div>
+
+        <!-- Draggable cubes -->
+        <div class="cube draggable" id="blueCubeDraggable" style="background-color: blue;" draggable="true"></div>
+        <div class="cube draggable" id="greenCubeDraggable" style="background-color: green;" draggable="true"></div>
+        <div class="cube draggable" id="redCubeDraggable" style="background-color: red;" draggable="true"></div>
     </div>
 
-    <button id="playButton" class="button" onclick="startGame()">Play</button>
-
-    <div id="gameArea" class="game">
-        <div id="snake" class="snake"></div>
-        <div id="score">Score: 0</div>
-    </div>
+    <button class="go-button" id="goButton" onclick="location.href='moon.html'">GO</button>
 
     <script>
-        let image = document.getElementById("moonImage");
-        let questionDiv = document.getElementById("mathQuestion");
-        let playButton = document.getElementById("playButton");
-        let gameArea = document.getElementById("gameArea");
-        let scoreDisplay = document.getElementById("score");
-        let snake = document.getElementById("snake");
-        let currentScore = 0;
+        const moonImage = document.getElementById("moonImage");
+        const cubesContainer = document.getElementById("cubesContainer");
+        const goButton = document.getElementById("goButton");
 
-        let mathQuestionAsked = false;
-        let gameStarted = false;
+        const blueCubeDraggable = document.getElementById("blueCubeDraggable");
+        const greenCubeDraggable = document.getElementById("greenCubeDraggable");
+        const redCubeDraggable = document.getElementById("redCubeDraggable");
 
-        let snakeDirection = "right";
-        let snakeSpeed = 100;
-        let snakeBody = [{ x: 10, y: 10 }];
-        let gameInterval;
-        let speedInterval;
+        const blueCube = document.getElementById("blueCube");
+        const greenCube = document.getElementById("greenCube");
+        const redCube = document.getElementById("redCube");
 
-        function generateMathQuestion() {
-            let num1 = Math.floor(Math.random() * 10);
-            let num2 = Math.floor(Math.random() * 10);
-            let correctAnswer = num1 + num2;
+        let isBluePlaced = false;
+        let isGreenPlaced = false;
+        let isRedPlaced = false;
 
-            document.getElementById("questionText").textContent = `${num1} + ${num2} = ?`;
-            document.getElementById("answer").value = "";
-            return correctAnswer;
+        // Handle moon image click to start the puzzle
+        moonImage.onclick = function() {
+            document.body.style.backgroundColor = "#ffffff"; // Change background to white
+            cubesContainer.classList.remove("hidden"); // Show cubes
+        };
+
+        // Drag start event
+        blueCubeDraggable.ondragstart = (event) => event.dataTransfer.setData("text", "blue");
+        greenCubeDraggable.ondragstart = (event) => event.dataTransfer.setData("text", "green");
+        redCubeDraggable.ondragstart = (event) => event.dataTransfer.setData("text", "red");
+
+        // Drag over event (to allow dropping)
+        function allowDrop(event) {
+            event.preventDefault();
         }
 
-        let correctAnswer = generateMathQuestion();
+        // Drop event (place the dragged cube)
+        blueCube.ondrop = (event) => drop(event, "blue");
+        greenCube.ondrop = (event) => drop(event, "green");
+        redCube.ondrop = (event) => drop(event, "red");
 
-        function checkAnswer() {
-            let userAnswer = parseInt(document.getElementById("answer").value);
-            if (userAnswer === correctAnswer) {
-                image.style.display = "none";
-                questionDiv.style.display = "none";
-                playButton.style.display = "block";
-            } else {
-                alert("Incorrect! Try again.");
-                correctAnswer = generateMathQuestion(); // Generate a new question
-            }
-        }
+        blueCube.ondragover = allowDrop;
+        greenCube.ondragover = allowDrop;
+        redCube.ondragover = allowDrop;
 
-        function startGame() {
-            gameArea.style.display = "block";
-            playButton.style.display = "none";
+        // Handle the cube placement logic
+        function drop(event, color) {
+            event.preventDefault();
+            const draggedColor = event.dataTransfer.getData("text");
 
-            // Create snake movement
-            gameInterval = setInterval(moveSnake, snakeSpeed);
-            speedInterval = setInterval(randomDot, 2000); // Create dots every 2 seconds
-
-            document.addEventListener("keydown", changeDirection);
-            document.addEventListener("keydown", speedUpSnake);
-        }
-
-        function moveSnake() {
-            let head = { ...snakeBody[0] };
-
-            if (snakeDirection === "right") head.x++;
-            if (snakeDirection === "left") head.x--;
-            if (snakeDirection === "up") head.y--;
-            if (snakeDirection === "down") head.y++;
-
-            snakeBody.unshift(head);
-            snakeBody.pop(); // Remove the tail to make it move
-
-            // Wrap the snake around the borders
-            if (head.x >= 25) head.x = 0;
-            if (head.x < 0) head.x = 24;
-            if (head.y >= 25) head.y = 0;
-            if (head.y < 0) head.y = 24;
-
-            renderSnake();
-        }
-
-        function renderSnake() {
-            let snakeHTML = "";
-            for (let i = 0; i < snakeBody.length; i++) {
-                snakeHTML += `<div class="snake" style="top: ${snakeBody[i].y * 20}px; left: ${snakeBody[i].x * 20}px;"></div>`;
-            }
-            document.querySelector("#snake").innerHTML = snakeHTML;
-        }
-
-        function changeDirection(e) {
-            if (e.key === "ArrowUp" && snakeDirection !== "down") snakeDirection = "up";
-            if (e.key === "ArrowDown" && snakeDirection !== "up") snakeDirection = "down";
-            if (e.key === "ArrowLeft" && snakeDirection !== "right") snakeDirection = "left";
-            if (e.key === "ArrowRight" && snakeDirection !== "left") snakeDirection = "right";
-        }
-
-        function speedUpSnake(e) {
-            if (e.key === " ") snakeSpeed = 50;
-        }
-
-        function randomDot() {
-            const dotTypes = ["red", "blue", "yellow", "black"];
-            const randomType = dotTypes[Math.floor(Math.random() * dotTypes.length)];
-
-            const dot = document.createElement("div");
-            dot.classList.add("dot", randomType);
-            dot.style.top = `${Math.floor(Math.random() * 25) * 20}px`;
-            dot.style.left = `${Math.floor(Math.random() * 25) * 20}px`;
-
-            dot.addEventListener("click", function () {
-                if (randomType === "black") {
-                    document.body.classList.add("shake");
-                    setTimeout(function () {
-                        document.body.classList.remove("shake");
-                    }, 2000);
-
-                    currentScore += Math.floor(Math.random() * (333 - 3 + 1) + 3);
-                    scoreDisplay.textContent = `Score: ${currentScore}`;
-                    setTimeout(function () {
-                        window.location.href = "moon.html";
-                    }, 2000);
-                } else {
-                    currentScore += 10;
-                    scoreDisplay.textContent = `Score: ${currentScore}`;
+            if (color === draggedColor) {
+                if (color === "blue") {
+                    isBluePlaced = true;
+                    blueCubeDraggable.style.pointerEvents = "none"; // Disable dragging once placed
                 }
-            });
+                if (color === "green") {
+                    isGreenPlaced = true;
+                    greenCubeDraggable.style.pointerEvents = "none";
+                }
+                if (color === "red") {
+                    isRedPlaced = true;
+                    redCubeDraggable.style.pointerEvents = "none";
+                }
 
-            gameArea.appendChild(dot);
+                checkIfAllPlaced();
+            }
+        }
+
+        // Check if all cubes are placed
+        function checkIfAllPlaced() {
+            if (isBluePlaced && isGreenPlaced && isRedPlaced) {
+                goButton.style.display = "block"; // Show the GO button
+            }
         }
     </script>
 </body>
